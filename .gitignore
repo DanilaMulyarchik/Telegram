@@ -7,7 +7,7 @@ env/
 # Файлы конфигурации и ключи
 .env
 *.env
-constant.py
+leaning_english\constant.py
 
 # Логи
 *.log
