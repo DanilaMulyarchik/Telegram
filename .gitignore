@@ -24,3 +24,4 @@ __pycache__/
 # Папки редакторов
 .vscode/
 .idea/
+leaning_english/constant.py
