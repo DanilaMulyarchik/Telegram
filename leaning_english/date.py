@@ -8,6 +8,6 @@ def get_date() -> str:
     """
     current_date = datetime.now()
 
-    formatted_date = current_date.strftime('%d_%m_%Y')
+    formatted_date = current_date.strftime('%Y-%m-%d')
 
     return formatted_date

@@ -2,16 +2,19 @@ import json
 from date import get_date
 
 
-def settings_save(words: list, check: bool) -> None:
-    data = {'words': words, 'check': check}
+def data_save(words: list) -> None:
+    data = {'words': words}
     with open(f'data/{get_date()}.json', 'w') as file:
         json.dump(data, file, indent=4)
 
 
-def settings_read(parametr: str) -> str:
+def data_main_read() -> str:
+    with open(f'data/main.json', 'r') as file:
+        loaded_data = json.load(file)
+        return loaded_data
+
+
+def data_read() -> str:
     with open(f'data/{get_date()}.json', 'r') as file:
         loaded_data = json.load(file)
-        if parametr == 'words':
-            return loaded_data['words']
-        if parametr == 'check':
-            return loaded_data['check']
+        return loaded_data
