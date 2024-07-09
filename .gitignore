@@ -25,3 +25,4 @@ __pycache__/
 .vscode/
 .idea/
 leaning_english/constant.py
+leaning_english/test.py
