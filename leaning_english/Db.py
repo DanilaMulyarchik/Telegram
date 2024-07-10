@@ -19,7 +19,7 @@ class DataBase:
             print('Conection off')
 
     def Add(self, table_name: str, data: dict) -> None:
-            if self.__find(table_name, data['telegram']):
+            if self.__find(table_name, data):
                 self.__update(table_name, data)
             else:
                 self.__add(table_name, data)
@@ -84,16 +84,23 @@ class DataBase:
             )
             connection.commit()
 
-    def Find(self, table_name, telegram):
-        return self.__find(table_name, telegram)
+    def Find(self, table_name, data):
+        return self.__find(table_name, data)
 
-    def __find(self, table_name, telegram):
+    def __find(self, table_name, data):
 
         connection = self.connection
 
+        if table_name == 'users':
+            set_condition = [f"{key} = '{value}'" if isinstance(value, str) else f"{key} = {value}" for key, value in
+                               data.items() if key == 'telegram']
+        else:
+            set_condition = [f"{key} = '{value}'" if isinstance(value, str) else f"{key} = {value}" for key, value in
+                               data.items() if key == 'telegram' or key == 'data']
+        set_clause = 'and '.join(set_condition)
         with connection.cursor() as cursor:
             cursor.execute(
-                f"""select * from {table_name} where telegram = '{telegram}'"""
+                f"""select * from {table_name} where {set_clause}"""
             )
             if not cursor.fetchall() == []:
                 return True
