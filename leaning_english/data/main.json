@@ -1,6 +1,6 @@
 {
   "words": [
-    {"english": "Cat", "russian": "Кошка"},
+    {"english": "Cat", "russian": "Кот"},
     {"english": "Dog", "russian": "Собака"},
     {"english": "House", "russian": "Дом"},
     {"english": "Tree", "russian": "Дерево"},
@@ -39,7 +39,7 @@
     {"english": "Pear", "russian": "Груша"},
     {"english": "Plum", "russian": "Слива"},
     {"english": "Strawberry", "russian": "Клубника"},
-    {"english": "Potato", "russian": "Картофель"},
+    {"english": "Potato", "russian": "Картошка"},
     {"english": "Tomato", "russian": "Помидор"},
     {"english": "Cucumber", "russian": "Огурец"},
     {"english": "Carrot", "russian": "Морковь"},

@@ -25,11 +25,11 @@ class EnglishLeane():
     async def button(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         query = update.callback_query
         await query.answer()
-        word_list = get_random_word_list()
+        word_list = get_random_word_list(7)
 
         if query.data == 'Учить':
             start = str(DataBase().Get('users', {'telegram': update.effective_user.username}, 'time')[0][0])
-            if get_time_difference(start, 12, 0, 0) or start == '00:00:00':
+            if get_time_difference(start, 1, 0, 0) or start == '00:00:00':
                 DataBase().Add('users', {'telegram': update.effective_user.username, 'word_index': 0, 'time': get_time()})
             message_text = "Список слов для изучения:\n"
             for i in range(len(word_list)):
@@ -41,7 +41,7 @@ class EnglishLeane():
 
         elif query.data == 'Проверить':
             start = str(DataBase().Get('users', {'telegram': update.effective_user.username}, 'time')[0][0])
-            if get_time_difference(start, 0, 30, 0):
+            if get_time_difference(start, 0, 15, 0):
                 DataBase().Add('users', {'telegram': update.effective_user.username, 'word_index': 0})
                 DataBase().Add('marks', {'telegram': update.effective_user.username, 'data': get_date(), 'mark': 0})
                 current_word = word_list[0]['english']
@@ -49,7 +49,7 @@ class EnglishLeane():
                 await query.edit_message_text(text=f"Переведите слово:\n{current_word}")
             else:
                 try:
-                    await query.edit_message_text(text=f"Вы сможете приступить к тесту через " + get_time_out(start), reply_markup=self.reply_markup)
+                    await query.edit_message_text(text=f"Вы сможете приступить к тесту через " + get_time_out(start, 15), reply_markup=self.reply_markup)
                 except:
                     pass
         elif query.data == 'Время':
@@ -61,7 +61,7 @@ class EnglishLeane():
                     pass
             else:
                 try:
-                    await query.edit_message_text(text=f"Вы сможете приступить к тесту через " + get_time_out(start), reply_markup=self.reply_markup)
+                    await query.edit_message_text(text=f"Вы сможете приступить к тесту через " + get_time_out(start, 15), reply_markup=self.reply_markup)
                 except:
                     pass
         elif query.data == 'Отметка':

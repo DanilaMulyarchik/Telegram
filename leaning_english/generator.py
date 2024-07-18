@@ -3,11 +3,11 @@ from data_manager import *
 import random
 
 
-def get_random_word_list():
+def get_random_word_list(coll: int):
     words = []
     all_words = data_main_read()['words']
     if check_file_exist('data') is None:
-        while len(words) < 5:
+        while len(words) < coll:
             random_word = random.choice(all_words)
             if random_word in words:
                 continue

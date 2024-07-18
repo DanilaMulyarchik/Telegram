@@ -1,20 +1,17 @@
-from datetime import datetime, time, timedelta
-
 from datetime import datetime, timedelta
 
 
-def get_time_out(start):
+def get_time_out(start, minutes):
     now = datetime.now()
     start_time = datetime.strptime(start, '%H:%M:%S').time()
     start = datetime.combine(now.date(), start_time)
 
-    end_time = start + timedelta(minutes=30)
+    end_time = start + timedelta(minutes=minutes)
 
     time_difference = end_time - now
 
     total_minutes = int(time_difference.total_seconds() // 60)
     hours, minutes = divmod(total_minutes, 60)
-
 
     if minutes == 1:
         word_minutes = 'минута'

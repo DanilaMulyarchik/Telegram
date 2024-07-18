@@ -1,0 +1,24 @@
+{
+    "words": [
+        {
+            "english": "Phone",
+            "russian": "\u0422\u0435\u043b\u0435\u0444\u043e\u043d"
+        },
+        {
+            "english": "Door",
+            "russian": "\u0414\u0432\u0435\u0440\u044c"
+        },
+        {
+            "english": "Water",
+            "russian": "\u0412\u043e\u0434\u0430"
+        },
+        {
+            "english": "Wind",
+            "russian": "\u0412\u0435\u0442\u0435\u0440"
+        },
+        {
+            "english": "Cat",
+            "russian": "\u041a\u043e\u0448\u043a\u0430"
+        }
+    ]
+}
