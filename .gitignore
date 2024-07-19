@@ -26,3 +26,5 @@ __pycache__/
 .idea/
 leaning_english/constant.py
 leaning_english/test.py
+LearnEnglish/test.py
+LearnEnglish/config/config.py

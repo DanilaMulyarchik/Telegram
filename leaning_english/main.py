@@ -41,7 +41,7 @@ class EnglishLeane():
 
         elif query.data == 'Проверить':
             start = str(DataBase().Get('users', {'telegram': update.effective_user.username}, 'time')[0][0])
-            if get_time_difference(start, 0, 15, 0):
+            if get_time_difference(start, 0, 0, 0):
                 DataBase().Add('users', {'telegram': update.effective_user.username, 'word_index': 0})
                 DataBase().Add('marks', {'telegram': update.effective_user.username, 'data': get_date(), 'mark': 0})
                 current_word = word_list[0]['english']

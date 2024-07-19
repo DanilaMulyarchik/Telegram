@@ -1,32 +1,6 @@
 {
     "words": [
-        {
-            "english": "Moon",
-            "russian": "\u041b\u0443\u043d\u0430"
-        },
-        {
-            "english": "Beach",
-            "russian": "\u041f\u043b\u044f\u0436"
-        },
-        {
-            "english": "Onion",
-            "russian": "\u041b\u0443\u043a"
-        },
-        {
-            "english": "Garlic",
-            "russian": "\u0427\u0435\u0441\u043d\u043e\u043a"
-        },
-        {
-            "english": "Island",
-            "russian": "\u041e\u0441\u0442\u0440\u043e\u0432"
-        },
-        {
-            "english": "Carrot",
-            "russian": "\u041c\u043e\u0440\u043a\u043e\u0432\u044c"
-        },
-        {
-            "english": "House",
-            "russian": "\u0414\u043e\u043c"
-        }
+        "123",
+        "123"
     ]
 }

@@ -13,7 +13,6 @@ def data_main_read() -> str:
         loaded_data = json.load(file)
         return loaded_data
 
-
 def data_read() -> str:
     with open(f'data/{get_date()}.json', 'r') as file:
         loaded_data = json.load(file)
