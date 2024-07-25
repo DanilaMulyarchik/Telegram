@@ -13,13 +13,11 @@ def read_data(folder: str, file: str):
 
 
 def update_data(telegram, **kwargs):
-    data = read_data('users', telegram)['user']
-    marks = read_data('users', telegram)['marks']
+    data = read_data(f'users/{telegram}', telegram)
     for key, value in kwargs.items():
         if key in data.keys():
-            data[key] = value
-        else:
-            marks[key] = value
-    if get_date() not in marks.keys():
-        marks[get_date()] = 0
-    save_data('users', data['telegram'], user=data, marks=marks)
+            for key2, value2 in value.items():
+                data[key][key2] = value2
+    save_data(f'users/{telegram}', telegram, **data)
+
+
