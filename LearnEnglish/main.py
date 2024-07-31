@@ -7,6 +7,7 @@ from generator.word_list_generator import get_word_list, update_word_list, get_t
 from os_processing.exist_file import *
 from users.new_user import create_new_user
 from get_data.get_data import *
+from mistakes_in_words.mistakes_in_words import check_for_mistakes
 
 
 class Bot():
@@ -35,8 +36,8 @@ class Bot():
 
     async def start(self, update: Update, content: ContextTypes.DEFAULT_TYPE):
         new_user = {'telegram': update.effective_user.username,
-                    'time': '', 'index': -1, 'action': '', 'difficulty': 1, 'quantity': 5}
-        marks = {get_date(): 0}
+                    'test_date': get_tomorrow_date(self.days), 'index': -1, 'action': '', 'day_mark': 0, 'difficulty': 1, 'quantity': 5}
+        marks = {}
         test_marks = {}
         if not check_dir_exist('users', update.effective_user.username):
             create_new_user(update.effective_user.username, user=new_user, marks=marks, test_marks=test_marks)
@@ -49,25 +50,17 @@ class Bot():
         action = query.data
 
         if action == 'learn':
-            if get_user_time(update.effective_user.username) == '':
-                update_data(update.effective_user.username, **{'user': {'time': get_time()}})
             await query.edit_message_text(text=self.__learn(update.effective_user.username),
                                           reply_markup=self.__create_reply_markup('check', 'mark', 'setting'))
         elif action == 'check':
-            if get_user_time(update.effective_user.username) == '':
+            if not check_file_exist(f'users/{update.effective_user.username}/words/{get_difficulty(update.effective_user.username)}-level', get_date()):
                 await query.edit_message_text(text="You haven't learned the words",
                                               reply_markup=self.__create_reply_markup('learn', 'setting'))
-            elif get_time_difference(get_user_time(update.effective_user.username), 0, self.minute_difference, 0):
+            else:
                 update_data(update.effective_user.username,
-                            **{'user': {'index': 0, 'time': get_time(), 'action': action}, get_tag_or_value(update.effective_user.username, self.days)['tag']: {get_date(): 0}})
+                            **{'user': {'index': 0, 'action': action, 'day_mark': 0}})
                 content.user_data['words'] = get_word_list(update.effective_user.username)
                 await query.edit_message_text(text="Translate word: " + content.user_data['words'][0]['english'])
-            else:
-                await query.edit_message_text(text=f"Time to study has not passed yet, "
-                                                   f"{get_time_out(get_user_time(update.effective_user.username), self.minute_difference)} minutes left",
-                                              reply_markup=self.__create_reply_markup('learn', 'setting'))
-        elif action == 'main_test':
-            pass
         elif action == 'mark':
             await query.edit_message_text(text=self.__mark(update.effective_user.username),
                                           reply_markup=self.__create_reply_markup('learn', 'check', 'setting'))
@@ -94,8 +87,7 @@ class Bot():
         try:
             if get_action(update.effective_user.username) == 'check':
                 if str(update.message.text.strip()).lower() == content.user_data['words'][get_index(update.effective_user.username)]['russian'].lower():
-                    update_data(update.effective_user.username, **{'user': {'index': get_index(update.effective_user.username) + 1},
-                                                                   get_tag_or_value(update.effective_user.username, self.days)['tag']: {get_date():  int(get_tag_or_value(update.effective_user.username, self.days)['value']) + 1}})
+                    update_data(update.effective_user.username, **{'user': {'index': get_index(update.effective_user.username) + 1, 'day_mark': get_day_mark(update.effective_user.username) + 1}})
                     await update.message.reply_text(text='True')
                 else:
                     update_data(update.effective_user.username, **{'user': {'index': get_index(update.effective_user.username) + 1}})
@@ -104,9 +96,9 @@ class Bot():
                 if get_index(update.effective_user.username) < len(content.user_data['words']):
                     await update.message.reply_text(text='Next word: ' + content.user_data['words'][get_index(update.effective_user.username)]['english'])
                 else:
-                    update_data(update.effective_user.username, **{'user': {'action': ''}})
+                    update_data(update.effective_user.username, **{'user': {'action': ''}, get_tag_or_value(update.effective_user.username): {get_date(): get_day_mark(update.effective_user.username)}})
                     await update.message.reply_text(text=f'You have completed the word list. Your mark is '
-                    f'{get_tag_or_value(update.effective_user.username, self.days)["value"]}',
+                    f'{get_day_mark(update.effective_user.username)}',
                                                     reply_markup=self.__create_reply_markup('check', 'mark'))
             elif get_action(update.effective_user.username) == 'quantity':
                 update_data(update.effective_user.username, **{'user': {'quantity': update.message.text.strip(), 'action': '', get_date(): 0}})
@@ -119,21 +111,22 @@ class Bot():
                                             reply_markup=self.__create_reply_markup('learn', 'check', 'mark', 'setting'))
 
     def __learn(self, telegram: str):
-        if len(get_all_mark(telegram)) // self.days != len(get_all_test_mark(telegram)):
-            get_test_word_list(telegram)
-            text = "Today is a test, it consists of words that you have taken over the last 3 days"
-        else:
+        if get_date() != get_test_date(telegram):
             word_list = get_word_list(telegram)
+            update_data(telegram, **{'users': {'test_date': get_tomorrow_date(self.days - 1)}})
             if len(word_list) != get_quantity(telegram):
                 update_word_list(telegram)
             text = "Today's set of words\n\n"
             for index in range(len(word_list)):
                 text += str(word_list[index]['english'] + ' <--> ' + word_list[index]['russian']) + '\n'
+        else:
+            get_test_word_list(telegram)
+            text = "Today is a test, it consists of words that you have taken over the last 3 days"
         return text
 
     def __mark(self, telegram: str):
         try:
-            mark = int(read_data(f'users/{telegram}', telegram)[get_tag_or_value(telegram, self.days)['tag']][get_date()])
+            mark = int(read_data(f'users/{telegram}', telegram)[get_tag_or_value(telegram)][get_date()])
             return f'Your mark for today is {mark}.'
         except:
             return f"You haven't checked"

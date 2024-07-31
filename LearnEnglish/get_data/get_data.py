@@ -6,8 +6,12 @@ def get_action(telegram: str):
     return read_data(f'users/{telegram}', telegram)['user']['action']
 
 
-def get_user_time(telegram: str):
-    return read_data(f'users/{telegram}', telegram)['user']['time']
+def get_test_date(telegram: str):
+    return read_data(f'users/{telegram}', telegram)['user']['test_date']
+
+
+def get_day_mark(telegram: str):
+    return int(read_data(f'users/{telegram}', telegram)['user']['day_mark'])
 
 
 def get_mark(telegram: str):
@@ -38,19 +42,5 @@ def get_quantity(telegram: str):
     return int(read_data(f'users/{telegram}', telegram)['user']['quantity'])
 
 
-def get_tag_or_value(telegram: str, day: int):
-    res = {'tag': '', 'value': ''}
-    if len(get_all_mark(telegram)) // day == len(get_all_test_mark(telegram)):
-        res['tag'] = 'marks'
-        try:
-            res['value'] = get_mark(telegram)
-        except:
-            res['value'] = 0
-    else:
-        res['tag'] = 'test_marks'
-        try:
-            res['value'] = get_test_mark(telegram)
-        except:
-            res['value'] = 0
-    return res
-
+def get_tag_or_value(telegram: str):
+    return 'marks' if get_test_date(telegram) != get_date() else 'test_marks'

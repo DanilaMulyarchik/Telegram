@@ -5,6 +5,10 @@ def get_time():
     return datetime.now().time().strftime('%H:%M:%S')
 
 
+def get_tomorrow_date(days: int):
+    return (datetime.now() + timedelta(days=days+1)).strftime('%Y-%m-%d')
+
+
 def get_date():
     return datetime.now().strftime("%Y-%m-%d")
 
