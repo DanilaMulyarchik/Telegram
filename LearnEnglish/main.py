@@ -7,7 +7,6 @@ from generator.word_list_generator import get_word_list, update_word_list, get_t
 from os_processing.exist_file import *
 from users.new_user import create_new_user
 from get_data.get_data import *
-from mistakes_in_words.mistakes_in_words import check_for_mistakes
 
 
 class Bot():
@@ -111,9 +110,16 @@ class Bot():
                                             reply_markup=self.__create_reply_markup('learn', 'check', 'mark', 'setting'))
 
     def __learn(self, telegram: str):
+        if not compair_date(get_date(), get_test_date(telegram)):
+            if len(get_all_mark(telegram)) / self.days == len(get_all_test_mark(telegram)):
+                update_data(telegram, **{'user': {'test_date': get_tomorrow_date(get_date(), self.days)}})
+            elif len(get_all_mark(telegram)) // self.days == len(get_all_test_mark(telegram)) + 1:
+                update_data(telegram, **{'user': {'test_date': get_date()}})
+            else:
+                update_data(telegram, **{'user': {'test_date': get_tomorrow_date(
+                    get_date(), self.days - 1 - (len(get_all_mark(telegram)) - len(get_all_test_mark(telegram)) * self.days))}})
         if get_date() != get_test_date(telegram):
             word_list = get_word_list(telegram)
-            update_data(telegram, **{'users': {'test_date': get_tomorrow_date(self.days - 1)}})
             if len(word_list) != get_quantity(telegram):
                 update_word_list(telegram)
             text = "Today's set of words\n\n"

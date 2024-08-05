@@ -5,8 +5,14 @@ def get_time():
     return datetime.now().time().strftime('%H:%M:%S')
 
 
-def get_tomorrow_date(days: int):
-    return (datetime.now() + timedelta(days=days+1)).strftime('%Y-%m-%d')
+def get_tomorrow_date(date: str, days: int):
+    date = datetime.strptime(date, "%Y-%m-%d")
+    new_date = date + timedelta(days=days+1)
+    return new_date.strftime("%Y-%m-%d")
+
+
+def compair_date(today: str, date: str):
+    return True if datetime.strptime(date, '%Y-%m-%d') >= datetime.strptime(today, '%Y-%m-%d') else False
 
 
 def get_date():

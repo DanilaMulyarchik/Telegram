@@ -26,7 +26,7 @@ def get_test_mark(telegram: str):
     return read_data(f'users/{telegram}', telegram)['test_marks'][get_date()]
 
 
-def get_all_test_mark(telegram: str):
+def get_all_test_mark(telegram: str) -> dict:
     return read_data(f'users/{telegram}', telegram)['test_marks']
 
 
