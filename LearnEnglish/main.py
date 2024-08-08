@@ -35,7 +35,7 @@ class Bot():
 
     async def start(self, update: Update, content: ContextTypes.DEFAULT_TYPE):
         new_user = {'telegram': update.effective_user.username,
-                    'test_date': get_tomorrow_date(self.days), 'index': -1, 'action': '', 'day_mark': 0, 'difficulty': 1, 'quantity': 5}
+                    'test_date': get_tomorrow_date(get_date(),self.days), 'index': -1, 'action': '', 'day_mark': 0, 'difficulty': 1, 'quantity': 5}
         marks = {}
         test_marks = {}
         if not check_dir_exist('users', update.effective_user.username):
